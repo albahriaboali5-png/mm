@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS Admin - لوحة التحكم</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Chart.js for beautiful graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="dashboard-body">
+
+    <!-- Background Animated Grid / Orbs -->
+    <div class="background-effects">
+        <div class="glow glow-1"></div>
+        <div class="glow glow-2"></div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="تبديل المظهر">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+    </button>
+
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar glass-panel">
+            <div class="sidebar-header">
+                <div class="logo-circle">
+                    <img src="logo.ico" alt="MAS Logo" class="rotating-mas">
+                </div>
+                <h2>MAS <span>MEDICAL HUB</span></h2>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-label"
+                    style="padding: 0.5rem 1.5rem; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                    الرئيسية</div>
+                <a href="#" class="nav-item active" onclick="switchView('overview', this)">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>نظرة عامة</span>
+                </a>
+
+                <div class="nav-label"
+                    style="padding: 1.5rem 1.5rem 0.5rem; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                    الإدارة الطبية</div>
+                <a href="#" class="nav-item" onclick="switchView('management', this)">
+                    <i class="fa-solid fa-hospital"></i>
+                    <span>العيادات والفروع</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchView('doctors', this)">
+                    <i class="fa-solid fa-user-doctor"></i>
+                    <span>الأطباء المتخصصون</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchView('users', this)">
+                    <i class="fa-solid fa-hospital-user"></i>
+                    <span>سجل المرضى</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchView('bookings', this)">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>إدارة الموعد / الحجوزات</span>
+                </a>
+
+                <div class="nav-label"
+                    style="padding: 1.5rem 1.5rem 0.5rem; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                    إدارة الموظفين</div>
+                <a href="#" class="nav-item" onclick="switchView('secretaries', this)">
+                    <i class="fa-solid fa-user-tie"></i>
+                    <span>السكرتارية</span>
+                </a>
+
+                <div class="nav-label"
+                    style="padding: 1.5rem 1.5rem 0.5rem; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                    النظام</div>
+                <a href="#" class="nav-item" id="nav-ads" onclick="switchView('ads', this)">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <span>إحصائيات وإعلانات</span>
+                </a>
+                <a href="#" class="nav-item" onclick="switchView('system', this)">
+                    <i class="fa-solid fa-microchip"></i>
+                    <span>حالة الخادم</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="avatar" style="background: linear-gradient(135deg, var(--accent-main), #ff4d8d);">م
+                    </div>
+                    <div class="details">
+                        <span class="name">المدير العام</span>
+                        <span class="role">Admin Console</span>
+                    </div>
+                </div>
+                <a href="javascript:void(0)" class="logout-btn" onclick="logout()">
+                    <i class="fa-solid fa-power-off"></i>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- Navbar -->
+            <header class="top-nav glass-panel">
+                <div class="nav-left">
+                    <h1 class="page-title" id="current-page-title">نظرة عامة (Overview)</h1>
+                    <p class="page-subtitle">أهلاً بك في مركز التحكم بـ MAS AI.</p>
+                </div>
+                <div class="nav-right">
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" placeholder="بحث سريع في النظام...">
+                    </div>
+                    <button class="notif-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dynamic Content Container -->
+            <div id="dynamic-content">
+                <!-- Views will be loaded here dynamically by app.js -->
+                <div class="loader" style="margin: 50px auto; display: block; text-align: center;">جاري التحميل...</div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="addBranchModal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-clinic-medical"></i> إضافة عيادة / فرع جديد</h2>
+                <span class="close" onclick="closeModal('addBranchModal')">&times;</span>
+            </div>
+            <form id="addBranchForm" onsubmit="handleCreateBranch(event)">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">أدخل تفاصيل الموقع
+                    الجغرافي للعيادة الجديدة.</p>
+                <div class="input-group">
+                    <i class="fa-solid fa-city"></i>
+                    <input type="text" id="branchGov" placeholder="المحافظة" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-map-marker-alt"></i>
+                    <input type="text" id="branchStreet" placeholder="اسم الشارع بالتفصيل" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-phone"></i>
+                    <input type="text" id="branchContact" placeholder="رقم هاتف التواصل">
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">حفظ الفرع الجديد</button>
+                    <button type="button" class="btn"
+                        style="background: rgba(255,255,255,0.05); color: var(--text-muted);"
+                        onclick="closeModal('addBranchModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="addSecretaryModal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-user-plus"></i> تسجيل سكرتير جديد</h2>
+                <span class="close" onclick="closeModal('addSecretaryModal')">&times;</span>
+            </div>
+            <form id="addSecretaryForm" onsubmit="handleRegisterSecretary(event)">
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">يرجى تزويد بيانات الدخول
+                    واختيار الفرع المسؤول عنه.</p>
+                <div class="input-group">
+                    <i class="fa-solid fa-user"></i>
+                    <input type="text" id="secName" placeholder="الاسم الكامل" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="secEmail" placeholder="البريد الإلكتروني" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="secPassword" placeholder="كلمة المرور" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-building"></i>
+                    <select id="secBranch" required>
+                        <option value="">اختر الفرع المسؤول عنه...</option>
+                        <!-- سيتم تعبئتها بواسطة JS -->
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">إتمام التسجيل</button>
+                    <button type="button" class="btn"
+                        style="background: rgba(255,255,255,0.05); color: var(--text-muted);"
+                        onclick="closeModal('addSecretaryModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Advertisement -->
+    <div id="addAdModal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-bullhorn"></i> إضافة إعلان جديد</h2>
+                <span class="close" onclick="closeModal('addAdModal')">&times;</span>
+            </div>
+            <form id="addAdForm" onsubmit="handleCreateAd(event)">
+                <div class="input-group">
+                    <i class="fa-solid fa-heading"></i>
+                    <input type="text" id="adTitle" placeholder="عنوان الإعلان الرئيسي..." required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-paragraph"></i>
+                    <input type="text" id="adSubtitle" placeholder="النص الفرعي..." required>
+                </div>
+                <div class="input-group">
+                    <i class="fa-solid fa-link"></i>
+                    <input type="url" id="adLink" placeholder="رابط الإعلان (اختياري)...">
+                </div>
+                <div class="file-upload-wrapper">
+                    <label for="adImage" class="file-label">
+                        <i class="fa-solid fa-cloud-upload-alt"></i>
+                        <span>اختر صورة الإعلان (اسحب وأفلت هنا)...</span>
+                    </label>
+                    <input type="file" id="adImage" accept="image/*" required onchange="previewAdImage(this)"
+                        style="display:none;">
+                    <div id="adImagePreview" class="image-preview-box"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa-solid fa-save"></i> حفظ ونشر الإعلان
+                    </button>
+                    <button type="button" class="btn"
+                        style="background: rgba(255,255,255,0.05); color: var(--text-muted);"
+                        onclick="closeModal('addAdModal')">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Diagnosis Details View -->
+    <div id="diagnosisDetailModal" class="modal">
+        <div class="modal-content glass-panel" style="max-width: 850px;">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-microscope"></i> تفاصيل التقرير الطبي والتشخيص</h2>
+                <span class="close" onclick="closeModal('diagnosisDetailModal')">&times;</span>
+            </div>
+            <div id="diagnosisDetailContent" class="modal-body">
+                <!-- Loaded via JS -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة التقرير</button>
+                <button type="button" class="btn" style="background: rgba(255,255,255,0.05); color: var(--text-muted);" onclick="closeModal('diagnosisDetailModal')">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<div class="ads-container">
+    <div class="glass-panel wow-card">
+        <div class="card-header">
+            <h2><i class="fa-solid fa-bullhorn" style="color: var(--accent-main);"></i> إدارة الإعلانات والترويج</h2>
+            <button class="btn btn-primary" onclick="openModal('addAdModal')">
+                <i class="fa-solid fa-plus"></i> إضافة إعلان جديد
+            </button>
+        </div>
+        <div class="table-responsive">
+            <div id="adsLoader" class="loader-container">
+                <div class="loader"></div>
+                <p>جاري تحميل الإعلانات الفعالة...</p>
+            </div>
+            <table class="admin-table" id="adsTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>صورة الإعلان</th>
+                        <th>العنوان الرئيسي</th>
+                        <th>النص الفرعي</th>
+                        <th>التوقيت / الحالة</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="ads-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Empty State (Hidden) -->
+    <div id="adsEmpty" class="glass-panel wow-card text-center" style="display:none; padding: 4rem;">
+        <i class="fa-solid fa-bullhorn"
+            style="font-size: 4rem; color: var(--text-muted); opacity: 0.2; margin-bottom: 1.5rem;"></i>
+        <h2 style="color: var(--text-muted);">لا توجد إعلانات حالياً</h2>
+        <p style="color: var(--text-muted);">ابدأ بجذب المستخدمين عبر إضافة أول إعلان ترويجي للمركز.</p>
+        <button class="btn btn-primary mt-1" onclick="openModal('addAdModal')">إضافة إعلان الآن</button>
+    </div>
+</div>

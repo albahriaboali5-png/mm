@@ -1,0 +1,182 @@
+<div class="system-container">
+    <div class="top-nav glass-panel mb-2" style="background: rgba(176, 0, 73, 0.05);">
+        <div class="nav-left">
+            <h1 class="page-title"><i class="fa-solid fa-microchip"></i> وحدة التحكم المركزية (MAS Core)</h1>
+            <p class="page-subtitle">إدارة موارد النظام، خوارزميات الذكاء الاصطناعي، والأمان المتقدم.</p>
+        </div>
+        <div class="nav-right">
+            <button class="btn btn-primary" onclick="alert('جاري بدء عملية النسخ الاحتياطي الشامل...')">
+                <i class="fa-solid fa-database"></i> نسخة احتياطية فورية
+            </button>
+        </div>
+    </div>
+
+    <!-- Server Metrics Row -->
+    <div class="stats-grid mb-2">
+        <div class="stat-card glass-panel wow-card">
+            <div class="stat-icon" style="color: #60a5fa;"><i class="fa-solid fa-server"></i></div>
+            <div class="stat-details">
+                <h3>حالة الخادم (Railway)</h3>
+                <div class="value">مستقر (99.9%)</div>
+                <div class="trend positive"><i class="fa-solid fa-check-circle"></i> متصل الآن</div>
+            </div>
+        </div>
+        <div class="stat-card glass-panel wow-card">
+            <div class="stat-icon" style="color: #f87171;"><i class="fa-solid fa-microchip"></i></div>
+            <div class="stat-details">
+                <h3>استهلاك المعالج (CPU)</h3>
+                <div class="value">12%</div>
+                <div class="trend positive"><i class="fa-solid fa-arrow-down"></i> أداء مثالي</div>
+            </div>
+        </div>
+        <div class="stat-card glass-panel wow-card">
+            <div class="stat-icon" style="color: #4ade80;"><i class="fa-solid fa-memory"></i></div>
+            <div class="stat-details">
+                <h3>الذاكرة المستخدمة (RAM)</h3>
+                <div class="value">1.4 GB / 4.0 GB</div>
+                <div class="trend stable">استهلاك طبيعي</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-body-grid">
+        <!-- AI Features Control -->
+        <div class="glass-panel">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-brain"></i> التحكم بمحركات الذكاء الاصطناعي</h2>
+            </div>
+            <div class="health-bars">
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+                        <div>
+                            <div style="font-weight: 700;">فحص أورام الدماغ (BrATS)</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">تحليل الرنين المغناطيسي للأورام.
+                            </div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked onchange="toggleSystemFeature('brats', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-icon" style="color: #00ffaa;"><i class="fa-solid fa-lungs"></i></div>
+                        <div>
+                            <div style="font-weight: 700;">فحص التهاب الرئة (Pneumonia)</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">تحليل الأشعة المقطعية للصدر.
+                            </div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked onchange="toggleSystemFeature('pneumonia', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-icon" style="color: #ffcc00;"><i class="fa-solid fa-hand-dots"></i></div>
+                        <div>
+                            <div style="font-weight: 700;">الأمراض الجلدية (Dermatology)</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">تحليل الآفات الجلدية واكتشاف
+                                السرطان.</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked onchange="toggleSystemFeature('skin', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-icon" style="color: #a855f7;"><i class="fa-solid fa-comments"></i></div>
+                        <div>
+                            <div style="font-weight: 700;">المساعد الطبي (Gemma 2B)</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">المحادثة التفاعلية مع الذكاء
+                                الاصطناعي.</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked onchange="toggleSystemFeature('chat', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Global System Security & Behavior -->
+        <div class="glass-panel">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-shield-halved"></i> الأمان وسلوك النظام</h2>
+            </div>
+            <div class="health-bars">
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-icon" style="color: #60a5fa;"><i class="fa-solid fa-user-plus"></i></div>
+                        <div>
+                            <div style="font-weight: 700;">تسجيل مستخدمين جدد</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">السماح بإنشاء حسابات جديدة
+                                بالتطبيق.</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked onchange="toggleSystemFeature('registration', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-toggle">
+                    <div class="feature-info">
+                        <div class="feature-icon" style="color: #facc15;"><i class="fa-solid fa-user-check"></i></div>
+                        <div>
+                            <div style="font-weight: 700;">تدقيق الأطباء الجديد</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">طلب الموافقة اليدوية لكل طبيب
+                                يسجل.</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" onchange="toggleSystemFeature('doctor_verify', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="feature-toggle"
+                    style="background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.1);">
+                    <div class="feature-info">
+                        <div class="feature-icon" style="color: #ef4444;"><i
+                                class="fa-solid fa-triangle-exclamation"></i></div>
+                        <div>
+                            <div style="font-weight: 700; color: #ef4444;">وضع الصيانة العام (Panic Mode)</div>
+                            <div style="font-size: 0.75rem; color: var(--text-muted);">إغلاق التطبيق فوراً وإظهار شاشة
+                                الصيانة.</div>
+                        </div>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" onchange="toggleSystemFeature('maintenance', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <p
+                    style="font-size: 0.7rem; color: var(--text-muted); line-height: 1.4; margin-top: 1rem; padding: 0 0.5rem;">
+                    * تنبيه: التغييرات في وضع الصيانة تؤثر على جميع المستخدمين الفعالين فوراً.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Managed Devices Section -->
+    <div class="glass-panel full-width mt-2">
+        <div class="card-header">
+            <h2><i class="fa-solid fa-laptop-medical"></i> إدارة الأجهزة المرتبطة (Device Management)</h2>
+            <button class="btn btn-primary" onclick="fetchDevices()"><i class="fa-solid fa-sync"></i> تحديث</button>
+        </div>
+        <div class="table-responsive" id="devicesList">
+            <div class="loader">جاري جلب قائمة الأجهزة النشطة...</div>
+        </div>
+    </div>
+</div>

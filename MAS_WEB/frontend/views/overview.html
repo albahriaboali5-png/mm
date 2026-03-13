@@ -1,0 +1,130 @@
+<div class="overview-container">
+    <!-- Stat Cards Row -->
+    <div class="stats-grid mb-2">
+        <div class="stat-card glass-panel wow-card">
+            <div class="stat-icon"><i class="fa-solid fa-user-md"></i></div>
+            <div class="stat-details">
+                <h3>الأطباء المعتمدون</h3>
+                <div class="value" id="stat-total-doctors">0</div>
+                <div class="trend positive"><i class="fa-solid fa-plus-circle"></i> كادر طبي متخصص</div>
+            </div>
+        </div>
+
+        <div class="stat-card glass-panel wow-card">
+            <div class="stat-icon" style="color: #4ade80;"><i class="fa-solid fa-notes-medical"></i></div>
+            <div class="stat-details">
+                <h3>تشخيصات اليوم</h3>
+                <div class="value" id="stat-diagnoses">0</div>
+                <div class="trend positive"><i class="fa-solid fa-bolt"></i> تحديث حي</div>
+            </div>
+        </div>
+
+        <div class="stat-card glass-panel wow-card">
+            <div class="stat-icon" style="color: #facc15;"><i class="fa-solid fa-microchip"></i></div>
+            <div class="stat-details">
+                <h3>دقة التحليل الحالية</h3>
+                <div class="value" id="stat-accuracy">98.5%</div>
+                <div class="trend stable">أداء AI مستقر</div>
+            </div>
+        </div>
+
+        <div class="stat-card glass-panel wow-card">
+            <div class="stat-icon" style="color: #60a5fa;"><i class="fa-solid fa-server"></i></div>
+            <div class="stat-details">
+                <h3>سعة النظام</h3>
+                <div class="value">99.9%</div>
+                <div class="trend positive"><i class="fa-solid fa-shield-check"></i> الخادم مستقر</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts area -->
+    <div class="dashboard-body-grid mb-2">
+        <div class="glass-panel wow-card">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-chart-line"></i> منحنى النشاط الأسبوعي</h2>
+                <select class="glass-select">
+                    <option>آخر 7 أيام</option>
+                    <option>آخر 30 يوم</option>
+                </select>
+            </div>
+            <div class="chart-container">
+                <div class="chart-wrapper" style="height: 320px;">
+                    <canvas id="activityChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-panel wow-card">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-shield-virus"></i> صحة النماذج (AI Health)</h2>
+            </div>
+            <div class="health-bars" style="padding: 1.5rem;">
+                <div class="health-item mb-2">
+                    <div class="health-info">
+                        <span>Pneumonia Detector</span>
+                        <span style="color: #4ade80;">99%</span>
+                    </div>
+                    <div class="progress-track" style="--val: 99%; --color: #4ade80">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="health-item mb-2">
+                    <div class="health-info">
+                        <span>BraTS MR-Analyzer</span>
+                        <span style="color: var(--accent-main);">97%</span>
+                    </div>
+                    <div class="progress-track" style="--val: 97%; --color: var(--accent-main)">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="health-item mb-2">
+                    <div class="health-info">
+                        <span>SkinCancer Scan</span>
+                        <span style="color: #facc15;">92%</span>
+                    </div>
+                    <div class="progress-track" style="--val: 92%; --color: #facc15">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="health-item">
+                    <div class="health-info">
+                        <span>Medical Assistant</span>
+                        <span style="color: #a855f7;">95%</span>
+                    </div>
+                    <div class="progress-track" style="--val: 95%; --color: #a855f7">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Table -->
+    <div class="glass-panel wow-card full-width">
+        <div class="card-header">
+            <h2><i class="fa-solid fa-bolt-lightning"></i> سجل العمليات المباشر (Active Queue)</h2>
+            <button class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.8rem;"
+                onclick="fetchDashboardData()">
+                <i class="fa-solid fa-sync"></i> تحديث الحالة
+            </button>
+        </div>
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>الرمز المعرف</th>
+                        <th>المريض</th>
+                        <th>التشخيص المطلوب</th>
+                        <th>التوقيت</th>
+                        <th>النسبة</th>
+                        <th>حالة الطلب</th>
+                    </tr>
+                </thead>
+                <tbody id="recent-activity-body">
+                    <!-- Dynamic Loading -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAS MEDICAL HUB - تسجيل الدخول</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body class="login-body">
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()" title="تغيير المظهر">
+        <i class="fa-solid fa-moon" id="theme-icon"></i>
+    </button>
+
+    <div class="login-container">
+        <!-- Toast Container -->
+        <div id="toast-container"></div>
+
+        <!-- Background Effects (Handled by style.css) -->
+        <div class="login-glass-card glass-panel wow-card">
+            <div class="logo-container">
+                <div class="rotating-logo">
+                    <img src="logo.ico" alt="MAS Logo">
+                </div>
+            </div>
+
+            <h1 class="login-title">MAS <span>MEDICAL HUB</span></h1>
+            <p class="login-subtitle">بوابة الإدارة الذكية والتحكم بالبيانات</p>
+
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="input-group">
+                    <i class="fa-solid fa-envelope input-icon"></i>
+                    <input  id="email" placeholder="البريد الإلكتروني للإدارة" required>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa-solid fa-lock input-icon"></i>
+                    <input type="password" id="password" placeholder="كلمة المرور" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary login-btn">
+                    <i class="fa-solid fa-unlock-keyhole"></i> دخول آمن للنظام
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>هذه البوابة مخصصة لمسؤولي المركز الطبي فقط.</p>
+                <a href="#" class="forgot-password">طلب استعادة الصلاحيات</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Set initial theme based on localStorage
+        if (localStorage.getItem('mas_theme') === 'light') {
+            document.body.classList.add('light-mode');
+            const themeIcon = document.getElementById('theme-icon');
+            if (themeIcon) themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        async function getWebDeviceId() {
+            let deviceId = localStorage.getItem('mas_persistent_device_id');
+            if (!deviceId) {
+                const random = Date.now().toString();
+                const part1 = random.substring(random.length - 2);
+                const part2 = Math.floor(Math.random() * 100).toString().padLeft(2, '0');
+                deviceId = `48:MA:C_:${part1}:${part2}:${random.substring(0, 2)}`;
+                localStorage.setItem('mas_persistent_device_id', deviceId);
+            }
+            return deviceId;
+        }
+
+        if (!String.prototype.padLeft) {
+            String.prototype.padLeft = function(length, character) {
+                return character.repeat(Math.max(0, length - this.length)) + this;
+            };
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.login-btn');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const deviceId = await getWebDeviceId();
+
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> جاري التحقق...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/medical/login/`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        email, 
+                        password,
+                        device_id: deviceId,
+                        device_name: `Dashboard (${navigator.platform || 'Web'})`
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.status === 'verification_required') {
+                        showToast('رمز التحقق مطلوب لجهازك الجديد', 'warning');
+                        showVerificationUI(email, password, data.device_id);
+                    } else if (data.status === 'maintenance') {
+                        showToast('النظام في وضع الصيانة حالياً: ' + (data.error || ''), 'error');
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        // Success path
+                        showToast('تم التحقق بنجاح! جاري توجيهك...', 'success');
+                        localStorage.setItem('mas_token', data.token);
+                        localStorage.setItem('mas_user', JSON.stringify(data.user));
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 1000);
+                    }
+                } else {
+                    showToast('خطأ في الدخول: ' + (data.error || 'يرجى التأكد من البيانات'), 'error');
+                    btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> دخول آمن للنظام';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showToast('فشل الاتصال بالخادم. تأكد من اتصالك.', 'error');
+                btn.innerHTML = '<i class="fa-solid fa-unlock-keyhole"></i> دخول آمن للنظام';
+                btn.disabled = false;
+            }
+        }
+
+        function showVerificationUI(email, password, deviceId) {
+            const form = document.querySelector('.login-form');
+            form.innerHTML = `
+                <div class="glass-panel" style="padding: 1.5rem; margin-bottom: 2rem; border: 1px solid rgba(176, 0, 73, 0.2);">
+                    <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--accent-main); font-weight: 700;">
+                        <i class="fa-solid fa-shield-halved"></i> تم اكتشاف دخول من جهاز جديد.
+                    </p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+                        يرجى إدخال الرمز المكون من 6 أرقام المرسل إلى إشعارات جهازك الرئيسي.
+                    </p>
+                    <div class="input-group">
+                        <i class="fa-solid fa-key input-icon"></i>
+                        <input type="text" id="verify_code" placeholder="000000" maxlength="6" 
+                               style="letter-spacing: 12px; font-weight: 900; text-align: center; font-size: 1.5rem;" required>
+                    </div>
+                    <button type="button" onclick="handleVerify('${email}', '${password}', '${deviceId}')" class="btn btn-primary login-btn" style="width: 100%;">
+                         تأكيد الرمز ودخول
+                    </button>
+                    <button type="button" onclick="location.reload()" class="btn" style="width: 100%; margin-top: 1rem; background: transparent; color: var(--text-muted);">
+                        إلغاء والعودة
+                    </button>
+                </div>
+            `;
+        }
+
+        async function handleVerify(email, password, deviceId) {
+            const code = document.getElementById('verify_code').value;
+            const btn = document.querySelector('.login-btn');
+            
+            if (code.length !== 6) {
+                alert('يرجى إدخال رمز صحيح مكون من 6 أرقام');
+                return;
+            }
+
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> جاري التأكيد...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/medical/verify-device//`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, device_id: deviceId, code })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showToast('تم توثيق الجهاز! جاري الدخول...', 'success');
+                    localStorage.setItem('mas_token', data.token);
+                    localStorage.setItem('mas_user', JSON.stringify(data.user));
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                } else {
+                    showToast('رمز التحقق غير صحيح: ' + (data.error || ''), 'error');
+                    btn.innerHTML = 'تأكيد الرمز ودخول';
+                    btn.disabled = false;
+                }
+            } catch (err) {
+                showToast('فشل الاتصال بالخادم.', 'error');
+                btn.disabled = false;
+            }
+        }
+
+        async function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-triangle';
+            if (type === 'warning') icon = 'fa-exclamation-circle';
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+    </script>
+</body>
+
+</html>
