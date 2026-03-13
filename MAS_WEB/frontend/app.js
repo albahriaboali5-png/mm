@@ -1,5 +1,5 @@
 // static API Base URL
-const API_BASE = 'https://mm';
+const API_BASE = 'https://back-production-3015.up.railway.app';
 
 // --- Core Logic ---
 
